@@ -1,0 +1,35 @@
+{% extends "index.html" %}
+
+{% block content %}
+{%if getInfo %}
+<div style="border: 1px solid green ; width: 20%; background-color: #00edad; padding-top: 5px;"><p>The action: {{updateStatus}}</p></div>
+{% endif %}
+{% if updateStatus == "rebooting" %}
+	<div>RAUC:
+		{% for row in getInfo %}
+		{{row}}<br>
+		{% endfor %}
+	</div>
+	<div>Update<font color="green"> successful </font>{{updateStatus}} system ... </div>
+{% else %}
+	{% if updateStatus == "failed" %}
+	<div><font color="red">Update {{updateStatus}}</font> something went wrong! <br><br> RAUC: 
+	{% for row in getInfo %}
+		{{row}}<br>
+		{% endfor %}
+	</div>
+		<br>
+	{%  elif updateStatus == "failedException" %}
+	<div><font color="red">Exception:</font> in gereral the update seems broken, contact the device support <br> RAUC: {{updateStatus}}</div>
+	{% endif %}
+	<div><p>&nbsp;</p></div>
+<div><h2>Firmware update: (RAUC Bundle)</h2></div>
+<div>
+	<form action="/fwupdate/doFirmwareUpdate" method="post" enctype="multipart/form-data">
+            Select a file: <input type="file" accept=".raucb" name="file"></div>
+            <div>
+            <input type="submit" value="Start firmware upgrade">
+ 	</form>
+ </div>
+ {% endif %}
+{% endblock %}

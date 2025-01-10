@@ -1,0 +1,28 @@
+[package]
+name = "fwupdate"
+homepage = "git@github.com:weratyr/fwupdate.git"
+description = "rust "
+license = " "
+authors = ["weratyr <weratyr@gmail.com>"]
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+actix-web = "4.3.1"
+actix-multipart = "0.6.0"
+actix-multipart-extract = "0.1.5"
+tera = "1.19.1"
+serde_json = "1.0"
+hostname = {version = "0.3.1", features = ["set"] }
+log = "0.4.20"
+env_logger = "0.10.1"
+
+
+
+
+[profile.release]
+opt-level = 'z'     # Optimize for size
+lto = true          # Enable link-time optimization
+codegen-units = 1   # Reduce number of codegen units to increase optimizations
+#panic = 'abort'     # Abort on panic
+strip = true        # Strip symbols from binary*
