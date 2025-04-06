@@ -22,13 +22,27 @@
 	<div><font color="red">Exception:</font> in gereral the update seems broken, contact the device support <br> RAUC: {{updateStatus}}</div>
 	{% endif %}
 	<div><p>&nbsp;</p></div>
-<div><h2>Firmware update: (RAUC Bundle)</h2></div>
-<div>
-	<form action="/fwupdate/doFirmwareUpdate" method="post" enctype="multipart/form-data">
-            Select a file: <input type="file" accept=".raucb" name="file"></div>
-            <div>
-            <input type="submit" value="Start firmware upgrade">
+<div style="padding-left: 100px;"><h2>Firmware update: (RAUC Bundle)</h2></div>
+<div style="float: left; padding-right: 50px; padding-left: 100px;">
+	Select a update file: 
+	<form action="/fwupdate/doFirmwareUpdate" method="post" enctype="multipart/form-data">    
+		<input type="file" accept=".raucb" name="file"><br>
+		<input type="hidden" name="fw_filename" value="">
+        <input type="submit" value="Start firmware upgrade">
  	</form>
  </div>
+ <div>
+	Select a update file from remote server (HTTP Update): 
+	<form action="/fwupdate/doFirmwareUpdate" method="post" enctype="multipart/form-data">    
+		<select accept=".raucb" name="fw_filename">
+			<option>-</option>
+			{% for row in fwList %}
+			<option>{{ row }}</option>
+			{% endfor %}
+		</select><br>
+        <input type="submit" value="Start firmware upgrade">
+ 	</form>
+ </div>
+
  {% endif %}
 {% endblock %}

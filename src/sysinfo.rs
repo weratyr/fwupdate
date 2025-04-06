@@ -115,6 +115,7 @@ pub fn save_file(payload: &Vec<u8>, file_path: String) -> Option<bool> {
 
 #[allow(dead_code)]
 pub fn do_rauc_update(rauc_bundle: String) -> std::io::Result<String> {
+    println!("do_rauc_update: {:?}", rauc_bundle);
     let mut rauc_install_cmd = Vec::new();
     rauc_install_cmd.push("rauc");
     rauc_install_cmd.push("install");
