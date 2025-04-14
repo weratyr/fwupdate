@@ -109,44 +109,45 @@ pub async fn fwupdate_upload(
     let mut rauc_result = String::from("");
     let mut rauc_stdout = String::from("");
     let fw_filename = form.fw_filename.clone();
-    println!("FORM: {:?}", form);
+    let mut files_list = form.files;
+    let path: String;
 
-    println!("fwupdate_upload: {:?}", form.files);
-    for f in form.files {
-        let path: String;
+    print!("Files: {:?}", files_list);
+    println!("Filename: {:?}", fw_filename);
 
-        if !fw_filename.is_empty() {
-            path = format!(
-                "{}/{}/{}/{}",
-                statics.http_remote_addr.clone(),
-                statics.http_remote_fw_type.clone(),
-                statics.web_project_name.clone(),
-                fw_filename.clone());
-                println!("Remote path: {:?}", path);
-        } else {
-            let file = f.file_name.unwrap();
-        
-            if file == "" {
-                break;
-            }
-            path = format!("{}/{}",
-                statics.web_fwupdate_path.clone(),
-                file);
-            println!("Local path: {:?}", path);
-            f.file.persist(path.clone()).unwrap();
+    if !fw_filename.is_empty() && fw_filename != "-" {
+        path = format!(
+            "{}/{}/{}/{}",
+            statics.http_remote_addr.clone(),
+            statics.http_remote_fw_type.clone(),
+            statics.web_project_name.clone(),
+            fw_filename.clone());
+            println!("Remote path: {:?}", path);
+    } else if !files_list.is_empty() {
+        let file = files_list.pop().unwrap();
+        let file_name = file.file_name.unwrap();
+        path = format!("{}/{}",
+            statics.web_fwupdate_path.clone(),
+            file_name);
+        println!("Local path: {:?}", path);
+        if file.size > 0 {
+            file.file.persist(path.clone()).unwrap();
         }
-        
-        if let Ok(res_string) = sysinfo::do_rauc_update(path) {
-            if res_string.contains(" succeeded") {
-                //println!("Update OK: {:?}", res_string.clone());
-                rauc_result = String::from("rebooting");
-            } else {
-                //println!("Update Error: {:?}", res_string.clone());
-                rauc_result = String::from("failed");
-            }
-            rauc_stdout = res_string.clone();
-        }
+    } else {
+        return Ok(HttpResponse::BadRequest().body("No file provided"));
     }
+    
+    if let Ok(res_string) = sysinfo::do_rauc_update(path) {
+        if res_string.contains(" succeeded") {
+            //println!("Update OK: {:?}", res_string.clone());
+            rauc_result = String::from("rebooting");
+        } else {
+            //println!("Update Error: {:?}", res_string.clone());
+            rauc_result = String::from("failed");
+        }
+        rauc_stdout = res_string.clone();
+    }
+    
     let fw_list = Vec::new();
     Ok(fwupdate(rauc_result, rauc_stdout, fw_list).await)
 }

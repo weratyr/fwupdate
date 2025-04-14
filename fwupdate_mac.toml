@@ -3,6 +3,6 @@ web_bind_port = 8080
 web_fwupdate_filesize = 80 
 web_fwupdate_path =  "./data" 
 web_project_name = "faketonie-rs"
-http_remote_addr = "http://10.10.2.58:8181/"
-http_remote_fw_type = "release"
+http_remote_addr = "http://10.10.2.58:8181"
+http_remote_fw_type = "dev"
 
