@@ -108,11 +108,10 @@ pub async fn fwupdate_upload(
 ) -> Result<impl Responder, Error> {
     let mut rauc_result = String::from("");
     let mut rauc_stdout = String::from("");
-    let fw_filename =form.fw_filename.clone();
-    let fw_type = "dev";
-    println!("{:?}", form);
+    let fw_filename = form.fw_filename.clone();
+    println!("FORM: {:?}", form);
 
-    //println!("fwupdate_upload: {:?}", form.files);
+    println!("fwupdate_upload: {:?}", form.files);
     for f in form.files {
         let path: String;
 
@@ -120,7 +119,7 @@ pub async fn fwupdate_upload(
             path = format!(
                 "{}/{}/{}/{}",
                 statics.http_remote_addr.clone(),
-                fw_type,
+                statics.http_remote_fw_type.clone(),
                 statics.web_project_name.clone(),
                 fw_filename.clone());
                 println!("Remote path: {:?}", path);
@@ -133,6 +132,7 @@ pub async fn fwupdate_upload(
             path = format!("{}/{}",
                 statics.web_fwupdate_path.clone(),
                 file);
+            println!("Local path: {:?}", path);
             f.file.persist(path.clone()).unwrap();
         }
         
