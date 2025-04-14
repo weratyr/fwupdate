@@ -117,7 +117,7 @@ pub async fn fwupdate_upload(
 
     if !fw_filename.is_empty() && fw_filename != "-" {
         path = format!(
-            "{}/{}/{}/{}",
+            "{}/fw/{}/{}/{}",
             statics.http_remote_addr.clone(),
             statics.http_remote_fw_type.clone(),
             statics.web_project_name.clone(),
