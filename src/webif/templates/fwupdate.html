@@ -1,7 +1,14 @@
 {% extends "index.html" %}
 {% block content %}
 {%if getInfo %}
-<div style="border: 1px solid green ; width: 20%; background-color: #00edad; padding-top: 5px;"><p>The action: {{updateStatus}}</p></div>
+<div style="border: 1px solid green ; width: 20%; background-color: #00edad; padding-top: 5px;">
+	<p>The action: {{updateStatus}}</p>
+	<p>
+		<form method="get" action="/fwupdate">
+			<input type="submit" value="go back">		
+		</form>
+	</p>
+</div>
 {% endif %}
 {% if updateStatus == "rebooting" %}
 	<div>RAUC:
